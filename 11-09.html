@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{margin: 0;padding: 0;}
+        .scroll{
+            width: 800px;
+            height: 8px;
+            background-color: #cccccc;
+            margin: 200px;
+            position: relative;
+        }
+        .bar{
+            width: 16px;
+            height: 24px;
+            background-color: #003366;
+            position: absolute;
+            top:-8px;
+            left: 0;
+            cursor: pointer;
+        }
+        .mask{
+            width: 0;
+            height: 100%;
+            background-color:  #003366;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="scroll" id="_scroll">
+    <div class="bar"></div>
+    <div class="mask"></div>
+</div>
+<div class="demo" id="_demo"></div>
+</body>
+</html>
+<script>
+    var scroll = document.getElementById('_scroll');
+    var bar = scroll.children[0];
+    var mask = scroll.children[1];
+    var demo = document.getElementById('_demo');
+    bar.onmousedown = function(event){
+        var  event = event || window.event;
+        var  that = this;
+        var leftVal = event.clientX - this.offsetLeft;
+        //这句就是为了得到scroll盒子到页边的距离，不用也可以，只为了更复杂的情况用
+        document.onmousemove = function(event){
+            var  event = event || window.event;
+            that.style.left = event.clientX - leftVal + 'px';
+            //限制范围
+            var val = that.offsetLeft;
+            if(val <0){that.style.left = 0;}
+            if(val > 800){that.style.left = 800 +'px';}
+            //mask的宽度
+            mask.style.width = that.style.left;
+
+            demo.innerHTML = "已经拉到了："+parseInt(parseInt(that.style.left)/scroll.offsetWidth*100)+"%";
+        }
+        window.getSelection ? window.getSelection().removeAllRanges() : document.selection.empty();
+        //清除鼠标选择的内容
+        document.onmouseup = function(){
+            document.onmousemove =null;
+        }
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
